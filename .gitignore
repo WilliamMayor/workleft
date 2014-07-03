@@ -52,3 +52,11 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+
+client_secrets.json
+
+workleft.zip
+
+workleft
+
+calendars.py

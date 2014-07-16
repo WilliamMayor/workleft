@@ -11,11 +11,11 @@ from icalendar import Calendar
 from calendars import calendars
 
 quotas = {
-    'month': 1300 + 714
+    'month': 1300 + 714.0
 }
-quotas['year'] = quotas['month'] * 12
-quotas['week'] = quotas['year'] / 52
-quotas['today'] = quotas['yesterday'] = quotas['year'] / 365.25
+quotas['year'] = quotas['month'] * 12.0
+quotas['week'] = quotas['year'] / 52.0
+quotas['today'] = quotas['yesterday'] = quotas['week'] / 5.0
 
 earnings = {
     'today': 0.0,

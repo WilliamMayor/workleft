@@ -17,16 +17,17 @@ quotas['year'] = quotas['month'] * 12.0
 quotas['week'] = quotas['year'] / 52.0
 quotas['today'] = quotas['yesterday'] = quotas['week'] / 5.0
 
-earnings = {
-    'today': 0.0,
-    'yesterday': 0.0,
-    'week': 0.0,
-    'month': 0.0,
-    'year': 0.0
-}
-
 
 def main():
+    earnings = {
+        'today': 0.0,
+        'yesterday': 0.0,
+        'week': 0.0,
+        'month': 0.0,
+        'year': 0.0
+    }
+    tax_savings = 0.0
+
     today = date.today()
     yesterday = today - timedelta(days=1)
     week = today - timedelta(days=today.weekday())
@@ -35,7 +36,7 @@ def main():
     if year > today:
         year = year - timedelta(years=1)
 
-    for url, hourly_rate in calendars:
+    for url, hourly_rate, tax_rate in calendars:
         r = requests.get(url, verify='/Users/william/Projects/workleft/cacert.pem')
         c = Calendar.from_ical(r.text)
 
@@ -44,6 +45,9 @@ def main():
             end = event['dtend'].dt
             hours = (end - start).seconds / (60.0 * 60)
             earned = hours * hourly_rate
+            tax = earned * tax_rate
+            earned -= tax
+            tax_savings += tax
             d = start.date()
 
             if d <= today:
@@ -68,6 +72,7 @@ def main():
     print ''
     print 'Projected Earnings: £%.2f' % projected_earnings
     print 'Estimated Tax Bill: £%.2f' % tax_estimate
+    print '       Tax Savings: £%.2f' % tax_savings
 
 if __name__ == '__main__':
     main()
